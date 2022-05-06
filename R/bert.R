@@ -1,3 +1,17 @@
+# Copyright 2021 Bedford Freeman & Worth Pub Grp LLC DBA Macmillan Learning.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 #' BERT Model
 #'
 #' Construct a BERT model.
@@ -43,22 +57,33 @@
 #' n_head <- 4L
 #' n_layer <- 6L
 #' vocab_size <- 30522L
-#' model <- model_bert(embedding_size = emb_size,
-#'               n_layer = n_layer,
-#'               n_head = n_head,
-#'               max_position_embeddings = mpe,
-#'               vocab_size = vocab_size)
+#' model <- model_bert(
+#'   embedding_size = emb_size,
+#'   n_layer = n_layer,
+#'   n_head = n_head,
+#'   max_position_embeddings = mpe,
+#'   vocab_size = vocab_size
+#' )
 #'
 #' n_inputs <- 2
 #' n_token_max <- 128L
 #' # get random "ids" for input
-#' t_ids <- matrix(sample(2:vocab_size, size = n_token_max * n_inputs,
-#'                       replace = TRUE),
-#'                nrow = n_token_max, ncol = n_inputs)
-#' ttype_ids <- matrix(rep(1L, n_token_max * n_inputs),
-#'                nrow = n_token_max, ncol = n_inputs)
-#' model(torch::torch_tensor(t_ids),
-#'       torch::torch_tensor(ttype_ids))
+#' t_ids <- matrix(
+#'   sample(
+#'     2:vocab_size,
+#'     size = n_token_max * n_inputs,
+#'     replace = TRUE
+#'   ),
+#'   nrow = n_token_max, ncol = n_inputs
+#' )
+#' ttype_ids <- matrix(
+#'   rep(1L, n_token_max * n_inputs),
+#'   nrow = n_token_max, ncol = n_inputs
+#' )
+#' model(
+#'   torch::torch_tensor(t_ids),
+#'   torch::torch_tensor(ttype_ids)
+#' )
 #' @export
 model_bert <- torch::nn_module(
   "BERT",
@@ -76,7 +101,8 @@ model_bert <- torch::nn_module(
       max_position_embeddings = max_position_embeddings,
       vocab_size = vocab_size,
       token_type_vocab_size = token_type_vocab_size,
-      hidden_dropout = hidden_dropout)
+      hidden_dropout = hidden_dropout
+    )
 
     self$encoder <- transformer_encoder_bert(
       embedding_size = embedding_size,
@@ -84,7 +110,8 @@ model_bert <- torch::nn_module(
       n_layer = n_layer,
       n_head = n_head,
       hidden_dropout = hidden_dropout,
-      attention_dropout = attention_dropout)
+      attention_dropout = attention_dropout
+    )
   },
   forward = function(token_ids, token_type_ids) {
     mask <- torch::torch_transpose(token_ids == 1, 1, 2)
@@ -92,9 +119,10 @@ model_bert <- torch::nn_module(
     emb_out <- self$embeddings(token_ids, token_type_ids)
     output <- self$encoder(emb_out, mask)
 
-    return(list("initial_embeddings" = emb_out,
-                "output_embeddings" = output$embeddings,
-                "attention_weights" = output$weights))
+    return(list(
+      "initial_embeddings" = emb_out,
+      "output_embeddings" = output$embeddings,
+      "attention_weights" = output$weights
+    ))
   }
 )
-

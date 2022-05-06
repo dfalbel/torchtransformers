@@ -1,6 +1,6 @@
 Package: torchtransformers
 Title: Transformer Models in Torch
-Version: 0.0.0.9004
+Version: 0.0.0.9009
 Authors@R: c(
     person(given = "Jonathan",
            family = "Bratt",
@@ -24,7 +24,21 @@ Depends: R (>= 3.5.1)
 License: Apache License (>= 2)
 RoxygenNote: 7.1.1
 Imports:
-    torch (>= 0.3.0.9)
+    dlr (>= 1.0.0),
+    stringr (>= 1.4.0),
+    torch (>= 0.4.0)
 Suggests: 
-    testthat (>= 3.0.0)
+    coro (>= 1.0.1),
+    dplyr,
+    ggplot2,
+    glue,
+    tibble,
+    testthat (>= 3.0.0),
+    knitr,
+    progress,
+    purrr,
+    rmarkdown,
+    wordpiece,
+    zoo
 Config/testthat/edition: 3
+VignetteBuilder: knitr
